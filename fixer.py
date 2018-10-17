@@ -22,7 +22,7 @@ def get_files():
 
 def get_0xfcc4(files):
     try:
-        out = subprocess.check_output("rg -l _0xfcc4 " + os.getcwd() + "/www", shell=True)
+        out = subprocess.check_output("rg -al _0xfcc4 " + os.getcwd() + "/www", shell=True)
     except subprocess.CalledProcessError:
         return []
     matches = [f.decode(sys.stdout.encoding) for f in out.strip().split(b'\n') if f != b""]
@@ -39,11 +39,11 @@ def get_0xfcc4(files):
 def fix_0xfcc4(files):
     txt = None
     for fn in files:
-        with open(fn, 'r', errors='ignore') as f:
+        with open(fn, 'rb') as f:
             txt = f.read()
-        txt1 = re.sub(r"<script language=javascript>var _0xfcc4.*</script>", "", txt, flags=re.M)
-        txt2 = re.sub(r"var _0xfcc4.*125\)\);", "", txt1, flags=re.M)
-        with open(fn, 'w') as f:
+        txt1 = re.sub(b"<script language=javascript>var _0xfcc4.*</script>", b"", txt, flags=re.M)
+        txt2 = re.sub(b"var _0xfcc4.*125\\)\\);", b"", txt1, flags=re.M)
+        with open(fn, 'wb') as f:
             f.write(txt2)
 
 def get_118(files):
